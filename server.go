@@ -1,8 +1,6 @@
 package main
 
-// todo not sure if all of these are needed?
 import (
-    //"crypto/rand"
     "crypto/tls"
     "log"
     "net"
@@ -10,12 +8,6 @@ import (
     "crypto/x509"
     "io/ioutil"
 )
-
-// References:
-//  https://golang.org/pkg/crypto/tls/
-//  https://gist.github.com/jim3ma/00523f865b8801390475c4e2049fe8c3
-//  https://gist.github.com/denji/12b3a568f092ab951456
-//  https://ericchiang.github.io/post/go-tls/
 
 func main() {
     cert, err := tls.LoadX509KeyPair("certs/server.crt", "certs/server.key")
@@ -28,7 +20,6 @@ func main() {
         log.Println(err)
         return
     }
-    //fmt.Print(string(dat))
     roots := x509.NewCertPool()
     ok := roots.AppendCertsFromPEM(dat)
     if !ok {
@@ -49,14 +40,12 @@ func main() {
         },
         Certificates:               []tls.Certificate{cert},
         ClientCAs:                  roots,
-        SessionTicketsDisabled:      true,
+        SessionTicketsDisabled:     true,
         ClientAuth:                 tls.RequireAndVerifyClientCert,
     }
 
-    ln, err := tls.Listen("tcp", "127.0.0.1:8883", &cfg) // note, example assigns config := &, and then passes config
+    ln, err := tls.Listen("tcp", "127.0.0.1:8883", &cfg)
     if err != nil {
-        //log.Println(err)
-        //return
         log.Fatalf("SERVER: tls.Listen: %s", err)
     }
     defer ln.Close()
@@ -87,8 +76,7 @@ func handleConnection(conn net.Conn, count int) {
         n, err := conn.Write([]byte("reply from server"))
         if err != nil {
             log.Println(n, err)
-            return // TODO is this really needed?
+            return
         }
     }
 }
-

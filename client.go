@@ -1,19 +1,11 @@
 package main
 
-// todo not sure if all of these are needed?
 import (
     "crypto/tls"
     "log"
     "crypto/x509"
     "io/ioutil"
-    //"fmt"
 )
-
-// References:
-//  https://golang.org/pkg/crypto/tls/
-//  https://gist.github.com/jim3ma/00523f865b8801390475c4e2049fe8c3
-//  https://gist.github.com/denji/12b3a568f092ab951456
-//  https://ericchiang.github.io/post/go-tls/
 
 func main() {
     cert, err := tls.LoadX509KeyPair("certs/client.crt", "certs/client.key")
@@ -27,7 +19,6 @@ func main() {
         log.Println(err)
         return
     }
-    //fmt.Print(string(dat))
     roots := x509.NewCertPool()
     ok := roots.AppendCertsFromPEM(dat)
     if !ok {
